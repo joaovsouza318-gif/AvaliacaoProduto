@@ -32,7 +32,7 @@ produtoForm.addEventListener("submit", (evt) => {
 
             resultado.innerHTML += `
                 <br>
-                ================ Dados do Produto ${i + 1} ================<br>
+                <strong>================= Dados do Produto ${i + 1} ================= </strong><br>
                 Descrição do Produto: ${elem.descricao}<br>
                 Valor Unitário do Produto: R$ ${elem.valorUnitario.toFixed(2)}<br>
                 Quantidade de Produtos: ${elem.quantidade}<br>
@@ -49,6 +49,4 @@ produtoForm.addEventListener("submit", (evt) => {
     };
 
     addListaProdutos(produto);
-
-    produtoForm.reset();
 });
