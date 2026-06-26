@@ -16,9 +16,9 @@
 */
 import * as func from "./calculo.js"
 
+const produtos = []
 const produtoForm = document.querySelector("#produtoForm")
 const resultado = document.querySelector("#div-resultado")
-var produtos = []
 
 produtoForm.addEventListener("submit", (evt) => {
     evt.preventDefault()
@@ -26,34 +26,37 @@ produtoForm.addEventListener("submit", (evt) => {
     const dados = new FormData(produtoForm)
 
     const produto = {
-        descricao: dados.get("#nomeP"),
-        valorUnitario: dados.get("#valorUni"),
-        quantidade: dados.get("#quantidade"),
-        valorTotal: valorUnitario * quantidade
+        descricao: dados.get("nomeP"),
+        valorUnitario: dados.get("valorUni"),
+        quantidade: dados.get("quantidade"),
     }
 
-    const addListaProdutos = (objetoProduto) => {   
-            produtos.push(objetoProduto)
-            listaProdutos()
-        }
+    const valorTotal = func.valorTotal(produto.valorUnitario, produto.quantidade)
+    const situacao = func.calcular(produto.descricao, produto.valorTotal)
+    
     const listaProdutos = () => {
         resultado.innerHTML = ''
         produtos.forEach((elem, i) => {
 
             resultado.innerHTML += `
             <br>
-                ================ Dados do Produtos ${i+1} ================    <br>
+                ================ Dados do Produto ${i+1} ================    <br>
                 Descrição do Produto: ${elem.descricao} <br>
                 Valor Unitário do Produto: ${elem.valorUnitario} <br>
                 Quantidade de Produtos: ${elem.quantidade} <br>
-                Valor Total do Produto: ${elem.valorTotal} <br>
-                Situação: ${func.calcular(elem.descricao, elem.valorUnitario, elem.quantidade)}
-
+                Valor Total do Produto: R$ ${valorTotal} <br>
+                Situação: ${situacao}
                 <br>
                 <br>
             `;
         })
     }
+
+    const addListaProdutos = (objetoProduto) => {   
+            produtos.push(objetoProduto)
+            listaProdutos()
+        }
+    
     addListaProdutos(produto)
 
 })
