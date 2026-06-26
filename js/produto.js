@@ -1,20 +1,52 @@
-/*
-    Até R$ 3000,00 Isento
-    Entre R$ 3000,00 até R$ 8.000,00 5%
-    Entre R$ 8.000,00 até R$ 12.000,00 10%
-    Entre R$ 12.000,00 até R$ 20.000,00 15%
-    Acima de R$ 20.000,00 20%
+import * as func from "./calculo.js";
 
-    Sua tarefa é desenvolver um algoritmo utilizando as tecnologias HTML e JavaScript para atender a esse desafio.
-    O sistema deverá conter um formulário que permita ao usuário informar os seguintes dados do lote:
-    Descrição do Produto; Valor unitário; Quantidade.
+const produtos = [];
+const produtoForm = document.querySelector("#produtoForm");
+const resultado = document.querySelector("#div-resultado");
 
-    Após o envio do formulário, o sistema deverá exibir, na mesma página e abaixo do formulário, uma lista contendo:
-    Valor adicional (ou a informação "Isento", quando aplicável); A lista deverá ser atualizada automaticamente a cada
-    novo produto cadastrado, preservando os registros inseridos anteriormente. 
-    Fica a seu critério mas é obrigatório utilizar: Array, Funções, Estrutura de repetição e Estrutura de Decisão.
-*/
+produtoForm.addEventListener("submit", (evt) => {
+    evt.preventDefault();
 
-const produtoForm = document.querySelector("#form-produto")
-const resultado = document.querySelector("#div-resultado")
+    const dados = new FormData(produtoForm);
 
+    const produto = {
+        descricao: dados.get("nomeP"),
+        valorUnitario: Number(dados.get("valorUni")),
+        quantidade: Number(dados.get("quantidade")),
+    };
+
+    const listaProdutos = () => {
+        resultado.innerHTML = "";
+
+        produtos.forEach((elem, i) => {
+
+            const valorTotal = func.valorTotal(
+                elem.valorUnitario,
+                elem.quantidade
+            );
+
+            const situacao = func.calcular(
+                elem.descricao,
+                valorTotal
+            );
+
+            resultado.innerHTML += `
+                <br>
+                <strong>================= Dados do Produto ${i + 1} ================= </strong><br>
+                Descrição do Produto: ${elem.descricao}<br>
+                Valor Unitário do Produto: R$ ${elem.valorUnitario.toFixed(2)}<br>
+                Quantidade de Produtos: ${elem.quantidade}<br>
+                Valor Total do Produto considerando Quantidade: R$ ${valorTotal.toFixed(2)}<br>
+                ${situacao}
+                <br><br>
+            `;
+        });
+    };
+
+    const addListaProdutos = (objetoProduto) => {
+        produtos.push(objetoProduto);
+        listaProdutos();
+    };
+
+    addListaProdutos(produto);
+});
